@@ -39,3 +39,22 @@ def submit():
 if __name__ == "__main__":
     # Run Flask server
     app.run(host="0.0.0.0", port=5000)
+
+
+@app.route("/test", methods=["GET"])
+def test_submission():
+    # Hardcoded submission data for testing
+    submission_data = {
+        "name": "GG",
+        "email": "G@example.com",
+        "analysis": {
+            "success": True,
+            "details": "Simulated image analysis placeholder"
+        }
+    }
+
+    # Run the placeholder grading
+    results = grade.grade_submission(submission_data)
+
+    # Return results as JSON
+    return results
