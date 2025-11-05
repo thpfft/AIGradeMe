@@ -1,0 +1,18 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment variables (keep Gemini key safe)
+.env
+
+# Logs
+*.log
+
+# System files
+.DS_Store
