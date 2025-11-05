@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    # Receives submission with: name, email, image file (sketch)
+    # Receives submission with name, email, image file (sketch)
     # Returns grading results as JSON
 
     data = request.form
@@ -21,7 +21,7 @@ def submit():
     if image:
         analysis = gemini.analyze_image(image.filename)
     else:
-        analysis = {"success": False, "details": "No image uploaded!"}
+        analysis = {"success": False, "details": "No image uploaded."}
 
     # Build submission dict for grading
     submission_data = {
@@ -36,25 +36,29 @@ def submit():
     # Return JSON response
     return jsonify(results)
 
-if __name__ == "__main__":
-    # Run Flask server
-    app.run(host="0.0.0.0", port=5000)
-
+# # Test
 
 @app.route("/test", methods=["GET"])
 def test_submission():
-    # Hardcoded submission data for testing
+    # Hardcoded test submission data
     submission_data = {
-        "name": "GG",
-        "email": "G@example.com",
+        "name": "Ron Geee",
+        "email": "ron@example.com",
         "analysis": {
             "success": True,
             "details": "Simulated image analysis placeholder"
         }
     }
 
-    # Run the placeholder grading
+    # Use your existing grade function
     results = grade.grade_submission(submission_data)
 
-    # Return results as JSON
-    return results
+    # Return as JSON
+    return jsonify(results)
+
+# # 
+
+
+if __name__ == "__main__":
+    # Run Flask server
+    app.run(host="0.0.0.0", port=5000)
