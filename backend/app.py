@@ -22,23 +22,23 @@ def submit():
     data = request.form
     image = request.files.get("image")
 
-if image:
-    # Save the uploaded image to a temporary file
-    filename = secure_filename(image.filename)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(filename)[1]) as tmp:
-        temp_path = tmp.name
-        image.save(temp_path)
+    if image:
+        # Save the uploaded image to a temporary file
+        filename = secure_filename(image.filename)
+        with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(filename)[1]) as tmp:
+            temp_path = tmp.name
+            image.save(temp_path)
 
-    # Send temp file to Gemini
-    analysis = gemini.analyze_image(temp_path)
+        # Send temp file to Gemini
+        analysis = gemini.analyze_image(temp_path)
 
-    # Delete the temp file after sending
-    try:
-        os.remove(temp_path)
-    except Exception:
-        pass
-else:
-    analysis = {"success": False, "details": "No image uploaded."}
+        # Delete the temp file after sending
+        try:
+            os.remove(temp_path)
+        except Exception:
+            pass
+    else:
+        analysis = {"success": False, "details": "No image uploaded."}
 
     # Build submission dict for grading
     submission_data = {
@@ -53,7 +53,7 @@ else:
     # Return JSON response
     return jsonify(results)
 
-# # Test
+# # Test Only
 
 @app.route("/test", methods=["GET"])
 def test_submission():
@@ -74,7 +74,6 @@ def test_submission():
     return jsonify(results)
 
 # # 
-
 
 if __name__ == "__main__":
     # Run Flask server
