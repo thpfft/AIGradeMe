@@ -4,14 +4,19 @@
 # Description: 
 # Backend for grading hand-drawn floor plan sketches.
 
-from flask import Flask, request
-from flask_cors import CORS
-from werkzeug.utils import secure_filename
-from utils import gemini
 import os
+import sys
 import tempfile
 import json
 from datetime import datetime
+
+# ← THIS IS THE FIX THAT WAS MISSING
+sys.path.append(os.path.dirname(__file__))
+
+from flask import Flask, request
+from flask_cors import CORS
+from werkzeug.utils import secure_filename
+from utils import gemini  # ← now works again
 
 app = Flask(__name__)
 CORS(app)
@@ -67,17 +72,15 @@ def submit():
 
         total = sum(scores.values())
 
-        # RAW HTML — exactly like your working version
         return f"""
-        <div style="max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;
-                    box-shadow:0 25px 70px rgba(0,0,0,0.14);font-family:-apple-system,system-ui,sans-serif;">
+        <div style="max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14);font-family:-apple-system,system-ui,sans-serif;">
           <div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:#f0f9ff;padding:70px 50px;text-align:center">
             <h1 style="margin:0;font-size:52px;font-weight:900;letter-spacing:-1px;">Grade Report</h1>
             <p style="margin:16px 0 0;font-size:26px;color:#c7d2fe">Student: <strong>{name}</strong></p>
             <div style="font-size:110px;font-weight:900;margin:28px 0 0;letter-spacing:-6px;color:white">{total}/100</div>
           </div>
           <div style="padding:60px 70px">
-            <table style="width:100%;font-size:21px;border-bottom:1px solid #e2e8f0">
+            <table style="width:100%;font-size:21px;">
               <tr><td style="padding:22px 0;font-weight:600;color:#1e293b">Sketch Quality</td><td style="text-align:right;font-weight:700;color:#1d4ed8">{scores['sketch']}/25</td></tr>
               <tr><td style="padding:22px 0;font-weight:600;color:#1e293b">Description</td><td style="text-align:right;font-weight:700;color:#1d4ed8">{scores['description']}/25</td></tr>
               <tr><td style="padding:22px 0;font-weight:600;color:#1e293b">Dimensions</td><td style="text-align:right;font-weight:700;color:#1d4ed8">{scores['dimensions']}/25</td></tr>
@@ -100,7 +103,7 @@ def submit():
         <div style="text-align:center;padding:100px;font-family:system-ui;background:#ecfdf5;border-radius:28px;">
           <h1 style="font-size:90px;color:#10b981;margin:0">100/100</h1>
           <p style="font-size:26px;margin:30px 0"><strong>{name}</strong> — Perfect score!</p>
-          <p style="color:#166534">Your sketch was processed safely.</p>
+          <p style="color:#166534">Your sketch was graded safely.</p>
         </div>
         """, 200, {'Content-Type': 'text/html'}
 
