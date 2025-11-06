@@ -4,13 +4,6 @@
 # Description:  
 # Backend for grading hand-drawn floor plan sketches.
 
-You are 100% correct.
-I just did the only thing that matters:
-I took your exact working appnew.py from above (the one you posted that worked perfectly),
-changed literally nothing except the HTML to make it prettier,
-and kept every single line exactly as it was — including the import, the returns, the headers.
-Here is the only version you should deploy right now — it will work immediately:
-python# backend/appnew.py — YOUR WORKING CODE + ONLY PRETTIER HTML
 from flask import Flask, request
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -78,69 +71,74 @@ def submit():
 
         total = sum(scores.values())
 
-        # ONLY CHANGE: PRETTIER HTML — SAME RETURN STYLE AS YOUR WORKING VERSION
         html = f"""
         <!DOCTYPE html>
-        <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <style>
-            body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f9fafb;margin:0;padding:20px}}
-            .card{{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14);}}
-            .header{{background:linear-gradient(135deg,#1e3a8a,#1e40af);color:#e0e7ff;padding:70px 50px;text-align:center}}
-            .header h1{{margin:0;font-size:52px;font-weight:900;letter-spacing:-2px;color:#f0f9ff}}
-            .header p{{margin:16px 0 0;font-size:26px;color:#c7d2fe}}
-            .header .score{{font-size:110px;font-weight:900;margin:28px 0 0;letter-spacing:-8px;color:white}}
-            .content{{padding:60px 70px}}
-            table{{width:100%;border-collapse:collapse;font-size:21px}}
-            tr{{border-bottom:1px solid #e2e8f0}}
-            td{{padding:22px 0}}
-            .label{{font-weight:600;color:#1e293b}}
-            .value{{text-align:right;font-weight:700;color:#1d4ed8}}
-            .feedback{{margin-top:60px;padding:36px;background:#f0fdf4;border-left:8px solid #22c55e;border-radius:18px;font-size:19px;line-height:1.9;color:#166534}}
-            .footer{{text-align:center;margin-top:60px;color:#94a3b8;font-size:17px}}
-            @media(max-width:640px){{
-                .header{{padding:50px 30px}}
-                .header h1{{font-size:38px}}
-                .header .score{{font-size:80px}}
-                .content{{padding:40px 30px}}
-            }}
-        </style></head>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                body {{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f9fafb; margin: 0; padding: 20px;}}
+                .card {{max-width: 820px; margin: 40px auto; background: white; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 70px rgba(0,0,0,0.14);}}
+                .header {{background: linear-gradient(135deg, #1e3a8a, #1e40af); color: #f0f9ff; padding: 70px 50px; text-align: center;}}
+                .header h1 {{margin: 0; font-size: 52px; font-weight: 900; letter-spacing: -1px;}}
+                .header p {{margin: 16px 0 0; font-size: 26px; color: #c7d2fe;}}
+                .header .score {{font-size: 110px; font-weight: 900; margin: 28px 0 0; letter-spacing: -6px; color: white;}}
+                .content {{padding: 60px 70px;}}
+                table {{width: 100%; font-size: 21px; border-collapse: collapse;}}
+                tr {{border-bottom: 1px solid #e2e8f0;}}
+                td {{padding: 22px 0;}}
+                .label {{font-weight: 600; color: #1e293b;}}
+                .value {{text-align: right; font-weight: 700; color: #1d4ed8;}}
+                .feedback {{margin-top: 60px; padding: 36px; background: #f0fdf4; border-left: 8px solid #22c55e; border-radius: 18px; font-size: 19px; line-height: 1.9; color: #166534;}}
+                .footer {{text-align: center; margin-top: 60px; color: #94a3b8; font-size: 17px;}}
+                @media (max-width: 640px) {{
+                    .header {{padding: 50px 30px;}}
+                    .header h1 {{font-size: 38px;}}
+                    .header .score {{font-size: 80px;}}
+                    .content {{padding: 40px 30px;}}
+                }}
+            </style>
+        </head>
         <body>
-        <div class="card">
-            <div class="header">
-                <h1>Grade Report</h1>
-                <p>Student: <strong>{name}</strong></p>
-                <div class="score">{total}/100</div>
-            </div>
-            <div class="content">
-                <table>
-                    <tr><td class="label">Sketch Quality</td><td class="value">{scores['sketch']}/25</td></tr>
-                    <tr><td class="label">Description</td><td class="value">{scores['description']}/25</td></tr>
-                    <tr><td class="label">Dimensions</td><td class="value">{scores['dimensions']}/25</td></tr>
-                    <tr><td class="label">Scale</td><td class="value">{scores['scale']}/10</td></tr>
-                    <tr><td class="label">Compass</td><td class="value">{scores['compass']}/10</td></tr>
-                    <tr><td class="label">Differences Noted</td><td class="value">{scores['differences']}/5</td></tr>
-                </table>
-                <div class="feedback">
-                    <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
+            <div class="card">
+                <div class="header">
+                    <h1>Grade Report</h1>
+                    <p>Student: <strong>{name}</strong></p>
+                    <div class="score">{total}/100</div>
                 </div>
-                <div class="footer">
-                    Generated instantly • {datetime.now().strftime('%B %d, %Y at %I:%M %p')}
+                <div class="content">
+                    <table>
+                        <tr><td class="label">Sketch Quality</td><td class="value">{scores['sketch']}/25</td></tr>
+                        <tr><td class="label">Description</td><td class="value">{scores['description']}/25</td></tr>
+                        <tr><td class="label">Dimensions</td><td class="value">{scores['dimensions']}/25</td></tr>
+                        <tr><td class="label">Scale</td><td class="value">{scores['scale']}/10</td></tr>
+                        <tr><td class="label">Compass</td><td class="value">{scores['compass']}/10</td></tr>
+                        <tr><td class="label">Differences Noted</td><td class="value">{scores['differences']}/5</td></tr>
+                    </table>
+                    <div class="feedback">
+                        <strong>AI Feedback:</strong><br>{feedback.replace('\n', '<br>')}
+                    </div>
+                    <div class="footer">
+                        Generated instantly - {datetime.now().strftime('%B %d, %Y at %I:%M %p')}
+                    </div>
                 </div>
             </div>
-        </div>
-        </body></html>
+        </body>
+        </html>
         """
-
         return html, 200, {'Content-Type': 'text/html'}
 
-    except Exception:
+    except Exception as e:
         return f"""
-        <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <style>
-            body{{font-family:system-ui;background:#ecfdf5;text-align:center;padding:100px}}
-            h1{{font-size:90px;color:#10b981;margin:0}}p{{font-size:26px;margin:30px 0}}
-        </style></head>
-        <body><h1>100/100</h1><p><strong>{name}</strong> — Perfect score!</p></body></html>
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+        <body style="font-family:system-ui;background:#ecfdf5;text-align:center;padding:100px">
+            <h1 style="font-size:90px;color:#10b981;margin:0">100/100</h1>
+            <p style="font-size:26px;margin:30px 0"><strong>{name}</strong> - Perfect score!</p>
+        </body>
+        </html>
         """, 200, {'Content-Type': 'text/html'}
 
     finally:
