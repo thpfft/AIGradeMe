@@ -47,6 +47,45 @@ def submit():
         "analysis": analysis
     }
 
+    # Extract scores and feedback directly from Gemini
+    scores = {
+        "sketch": None,
+        "description": None,
+        "dimensions": None,
+        "scale": None,
+        "compass": None,
+        "differences": None,
+    }
+    feedback = "(No feedback from Gemini.)"
+
+    try:
+        # Gemini's response contains candidates -> content -> parts -> text
+        raw_text = analysis["candidates"][0]["content"]["parts"][0]["text"]
+    
+        # Remove any ```json ``` wrappers
+        raw_text = raw_text.strip("```json").strip("```").strip()
+    
+        gemini_result = json.loads(raw_text)
+        scores.update(gemini_result.get("scores", {}))
+        feedback = gemini_result.get("feedback", feedback)
+    except Exception:
+        pass
+
+    # Compute total (sum numeric scores)
+    total = sum(v for v in scores.values() if isinstance(v, (int, float)))
+
+    # Build final result
+    results = {
+        "name": submission_data.get("name", ""),
+        "email": submission_data.get("email", ""),
+        "scores": scores,
+        "total": total,
+        "feedback": feedback,
+    }
+
+    return jsonify(results)
+       
+    
     # Get grading results
     # results = grade.grade_submission(submission_data)
 
@@ -54,11 +93,11 @@ def submit():
     # return jsonify(results)
 
     # Test: Instead of grading, just return Gemini output
-    return jsonify({
-        "name": submission_data.get("name", ""),
-        "email": submission_data.get("email", ""),
-        "gemini_raw": analysis
-    })
+    # return jsonify({
+    #     "name": submission_data.get("name", ""),
+    #     "email": submission_data.get("email", ""),
+    #     "gemini_raw": analysis
+    # })
 
 # # Test Only
 
