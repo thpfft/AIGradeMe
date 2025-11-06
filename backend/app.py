@@ -7,6 +7,9 @@
 from flask import Flask, request, jsonify
 from utils import gemini, grade
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
+import tempfile
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -19,11 +22,23 @@ def submit():
     data = request.form
     image = request.files.get("image")
 
-    # For now, simulate sending to Gemini
-    if image:
-        analysis = gemini.analyze_image(image.filename)
-    else:
-        analysis = {"success": False, "details": "No image uploaded."}
+if image:
+    # Save the uploaded image to a temporary file
+    filename = secure_filename(image.filename)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(filename)[1]) as tmp:
+        temp_path = tmp.name
+        image.save(temp_path)
+
+    # Send temp file to Gemini
+    analysis = gemini.analyze_image(temp_path)
+
+    # Delete the temp file after sending
+    try:
+        os.remove(temp_path)
+    except Exception:
+        pass
+else:
+    analysis = {"success": False, "details": "No image uploaded."}
 
     # Build submission dict for grading
     submission_data = {
