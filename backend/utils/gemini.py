@@ -55,6 +55,16 @@ Please return JSON with the following fields:
         f"?key={GEMINI_KEY}"
     )
 
+
+    # Determine MIME type based on file extension
+    ext = os.path.splitext(image_path)[1].lower()
+    if ext in [".jpg", ".jpeg"]:
+        mime_type = "image/jpeg"
+    elif ext == ".png":
+        mime_type = "image/png"
+    else:
+        mime_type = "application/octet-stream"  # fallback, may still fail
+
     payload = {
         "contents": [
             {
@@ -62,7 +72,7 @@ Please return JSON with the following fields:
                     {"text": rubric_instructions},
                     {
                         "inline_data": {
-                            "mime_type": "application/octet-stream",  # should work for any file type
+                            "mime_type": mime_type,
                             "data": encoded_image
                         }
                     }
@@ -70,7 +80,7 @@ Please return JSON with the following fields:
             }
         ]
     }
-
+    
     response = requests.post(url, json=payload)
     if response.status_code == 200:
         return response.json()
