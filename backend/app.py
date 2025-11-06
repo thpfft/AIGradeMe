@@ -48,10 +48,17 @@ def submit():
     }
 
     # Get grading results
-    results = grade.grade_submission(submission_data)
+    # results = grade.grade_submission(submission_data)
 
     # Return JSON response
-    return jsonify(results)
+    # return jsonify(results)
+
+    # Test: Instead of grading, just return Gemini output
+    return jsonify({
+        "name": submission_data.get("name", ""),
+        "email": submission_data.get("email", ""),
+        "gemini_raw": analysis
+    })
 
 # # Test Only
 
