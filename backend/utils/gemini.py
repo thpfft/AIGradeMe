@@ -10,25 +10,41 @@ import requests
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 
 def analyze_image(image_path):
-    rubric_instructions = """
-    Evaluate this hand-drawn floor plan sketch. The rubric:
-    1. Sketch of a house floor plan, hand drawn, must include labeled rooms (25%).
-    2. Two sentences describing what the sketch represents (25%).
-    3. Dimensions of rooms must be present (25%).
-    4. Scale indicator showing imperial or metric (10%).
-    5. Compass included (10%).
-    6. A sentence explaining how this differs from a professional plan (5%).
-
-    For each item:
-      - Return True/False if it meets the requirement
-      - Extract any relevant text
-
-    At the end:
-      - Provide a short explanation (2–4 sentences) describing
-        how the submission met or did not meet the rubric requirements.
+    """
+    Sends the uploaded image to Gemini AI for grading according to the rubric.
+    Returns structured JSON including scores and feedback.
     """
 
-    # Read image
+    # Rubric instructions for AI
+    rubric_instructions = """
+Evaluate this hand-drawn floor plan sketch according to the rubric:
+1. Sketch of a house floor plan, hand drawn, must include labeled rooms (25%).
+2. Two sentences describing what the sketch represents (25%).
+3. Dimensions of rooms must be present (25%).
+4. Scale indicator showing imperial or metric (10%).
+5. Compass included (10%).
+6. A sentence explaining how this differs from a professional plan (5%).
+
+Please return JSON with the following fields:
+{
+  "scores": {
+    "sketch": int,
+    "description": int,
+    "dimensions": int,
+    "scale": int,
+    "compass": int,
+    "differences": int
+  },
+  "feedback": str
+}
+
+- Scores should reflect the AI judgment: full points if requirement met, partial if partially met, zero if not included.
+- In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible
+- Provide a short textual explanation in "feedback" (2–4 sentences).
+- Output must be valid JSON only, no extra commentary.
+"""
+
+    # Encode image to base64
     with open(image_path, "rb") as f:
         encoded_image = base64.b64encode(f.read()).decode("utf-8")
 
@@ -45,7 +61,7 @@ def analyze_image(image_path):
                     {"text": rubric_instructions},
                     {
                         "inline_data": {
-                            "mime_type": "image/png",   # adjust if JPEG
+                            "mime_type": "image/png",  # adjust if JPEG
                             "data": encoded_image
                         }
                     }
