@@ -26,15 +26,11 @@ def grade_submission(submission):
     feedback = ""
 
     try:
-        candidate = gemini_data["candidates"][0]["content"]["parts"][0]
-        feedback = candidate.get("text", "")
-
-        # If Gemini returns structured scores, overwrite defaults
-        if "scores" in candidate:
-            ai_scores = candidate["scores"]
-            for key in scores:
-                if key in ai_scores:
-                    scores[key] = ai_scores[key]
+        feedback = gemini_data.get("feedback", "(No feedback from Gemini.)")
+        ai_scores = gemini_data.get("scores", {})
+        for key in scores:
+            if key in ai_scores:
+                scores[key] = ai_scores[key]
     except Exception:
         feedback = "(No feedback from Gemini.)"
 
