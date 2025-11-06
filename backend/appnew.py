@@ -1,7 +1,7 @@
 # AIGradeMe Backend
 # Author: Ron Goodson
 # Date: 2025-11-05
-# Description: 
+# Description:  
 # Backend for grading hand-drawn floor plan sketches.
 
 import os
