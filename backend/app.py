@@ -47,40 +47,28 @@ def submit():
         "analysis": analysis
     }
 
-    # Extract scores and feedback directly from Gemini
-    scores = {
-        "sketch": None,
-        "description": None,
-        "dimensions": None,
-        "scale": None,
-        "compass": None,
-        "differences": None,
-    }
-    feedback = "(No feedback from Gemini.)"
+    raw_feedback = None
 
     try:
-        # Gemini's response contains candidates -> content -> parts -> text
-        raw_text = analysis["candidates"][0]["content"]["parts"][0]["text"]
-    
-        # Remove any ```json ``` wrappers
-        raw_text = raw_text.strip("```json").strip("```").strip()
-    
-        gemini_result = json.loads(raw_text)
-        scores.update(gemini_result.get("scores", {}))
-        feedback = gemini_result.get("feedback", feedback)
-    except Exception:
-        pass
+        # Attempt to get Gemini's returned text
+        raw_feedback = (
+            analysis.get("candidates", [{}])[0]
+                   .get("content", {})
+                   .get("parts", [{}])[0]
+                   .get("text", None)
+        )
+        print("\n=== RAW GEMINI RESPONSE ===\n", raw_feedback, "\n===========================\n")
+    except:
+        raw_feedback = None
 
-    # Compute total (sum numeric scores)
-    total = sum(v for v in scores.values() if isinstance(v, (int, float)))
+    if not raw_feedback:
+        raw_feedback = str(analysis)
 
     # Build final result
     results = {
         "name": submission_data.get("name", ""),
         "email": submission_data.get("email", ""),
-        "scores": scores,
-        "total": total,
-        "feedback": feedback,
+        "feedback": raw_feedback
     }
 
     return jsonify(results)
