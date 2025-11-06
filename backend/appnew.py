@@ -2,9 +2,8 @@
 # Author: Ron Goodson
 # Date: 2025-11-05
 # Description: 
-# Flask backend for grading hand-drawn floor plan sketches.
+# Backend for grading hand-drawn floor plan sketches.
 
-python# app.py – Final polished version
 from flask import Flask, request
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
