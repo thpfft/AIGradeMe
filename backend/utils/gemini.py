@@ -6,15 +6,16 @@
 import os
 import base64
 import requests
+import json
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
+if GEMINI_KEY is None:
+    raise RuntimeError("Error: GEMINI_API_KEY not set in environment")
 
 def analyze_image(image_path):
-    """
-    Sends the uploaded image to Gemini AI for grading according to the rubric.
-    Returns structured JSON including scores and feedback.
-    """
-
+    # Sends the uploaded image to Gemini AI for grading according to the rubric.
+    # Returns structured JSON including scores and feedback.
+    
     # Rubric instructions for AI
     rubric_instructions = """
 Evaluate this hand-drawn floor plan sketch according to the rubric:
@@ -61,7 +62,7 @@ Please return JSON with the following fields:
                     {"text": rubric_instructions},
                     {
                         "inline_data": {
-                            "mime_type": "image/png",  # adjust if JPEG
+                            "mime_type": "application/octet-stream",  # should work for any file type
                             "data": encoded_image
                         }
                     }
