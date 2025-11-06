@@ -120,7 +120,7 @@ def submit():
                         <strong>AI Feedback:</strong><br>{feedback.replace('\n', '<br>')}
                     </div>
                     <div class="footer">
-                        Generated instantly - {datetime.now().strftime('%B %d, %Y at %I:%M %p')}
+                        Generated instantly · {datetime.now().strftime('%B %d, %Y at %I:%M %p')}
                     </div>
                 </div>
             </div>
@@ -129,14 +129,14 @@ def submit():
         """
         return html, 200, {'Content-Type': 'text/html'}
 
-    except Exception as e:
+    except Exception:
         return f"""
         <!DOCTYPE html>
         <html>
         <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
         <body style="font-family:system-ui;background:#ecfdf5;text-align:center;padding:100px">
             <h1 style="font-size:90px;color:#10b981;margin:0">100/100</h1>
-            <p style="font-size:26px;margin:30px 0"><strong>{name}</strong> - Perfect score!</p>
+            <p style="font-size:26px;margin:30px 0"><strong>{name}</strong> — Perfect score!</p>
         </body>
         </html>
         """, 200, {'Content-Type': 'text/html'}
