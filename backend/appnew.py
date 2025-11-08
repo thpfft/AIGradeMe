@@ -7,7 +7,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from utils import gemini
+from utils import gemini, gemini.get_rubric
 import os
 import tempfile
 import json
@@ -131,6 +131,11 @@ def submit():
 @app.route("/", methods=["GET"])
 def home():
     return "Ready."
+
+@app.route("/rubric", methods=["GET"])
+def rubric():
+    # Return the student-facing rubric from prompt.txt
+    return gemini.get_rubric(), 200, {"Content-Type": "text/plain; charset=utf-8"}
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
