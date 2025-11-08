@@ -21,6 +21,10 @@ if len(parts) != 2:
     raise RuntimeError("prompt.txt must contain '=== PROMPT ===' separator")
 RUBRIC_TEXT, PROMPT_TEMPLATE = parts[0].strip(), parts[1].strip()
 
+print("=== PROMPT SENT TO GEMINI ===")
+print(PROMPT_TEMPLATE)
+print("=== END PROMPT ===")
+
 def analyze_image(image_path: str):
     with open(image_path, "rb") as f:
         encoded = base64.b64encode(f.read()).decode("utf-8")
