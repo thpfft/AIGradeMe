@@ -2,7 +2,7 @@
 # Author: Ron Goodson
 # Date: 2025-11-05
 # Description:  
-# Backend for grading hand-drawn floor plan sketches.
+# Backend for grading submitted images.
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -32,19 +32,16 @@ def extract_json(text):
 def submit():
     name = request.form.get("name", "Student").strip()
     email = request.form.get("email", "").strip()
-   
+  
     if not name or not email or "image" not in request.files:
         return '<div style="color:red;font-weight:bold;">Missing name, email, or image</div>', 400
-
     file = request.files["image"]
     if not file or not file.filename:
         return '<div style="color:red;font-weight:bold;">No image selected</div>', 400
-
     suffix = os.path.splitext(secure_filename(file.filename))[1] or ".jpg"
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
     file.save(tmp.name)
     path = tmp.name
-
     try:
         result = gemini.analyze_image(path)
         try:
@@ -52,25 +49,44 @@ def submit():
         except:
             raw = str(result)
 
+        # === DEBUG: See what Gemini returns ===
+        print("RAW GEMINI RESPONSE:", raw)
+
         data = extract_json(raw)
 
         if not data or "scores" not in data:
-            scores = {"sketch":25,"description":25,"dimensions":25,"scale":10,"compass":10,"differences":5}
-            feedback = "Perfect! Every requirement was clearly met."
+            print("FALLBACK: Invalid or missing JSON. Raw length:", len(raw) if raw else 0)
+
+            # Empty or garbage response
+            if not raw or len(raw.strip()) < 30:
+                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
+                feedback = "No floor plan detected. Please upload a clear hand-drawn sketch with rooms, labels, dimensions, and scale."
+
+            # Gemini rejected (error, unsafe, etc.)
+            elif any(word in raw.lower() for word in ["error", "invalid", "unsafe", "cannot", "unable"]):
+                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
+                feedback = "Image rejected: not a valid floor plan. Try a clearer hand-drawn sketch."
+
+            # JSON failed but response exists
+            else:
+                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
+                feedback = "AI could not analyze this sketch. Please ensure it's a hand-drawn floor plan with visible details."
+
         else:
+            # === NORMAL SCORING: Real JSON received ===
+            print("Valid JSON received. Proceeding with scoring.")
             s = data["scores"]
             scores = {
-                "sketch": max(0, min(25, int(s.get("sketch",0)))),
-                "description": max(0, min(25, int(s.get("description",0)))),
-                "dimensions": max(0, min(25, int(s.get("dimensions",0)))),
-                "scale": max(0, min(10, int(s.get("scale",0)))),
-                "compass": max(0, min(10, int(s.get("compass",0)))),
-                "differences": max(0, min(5, int(s.get("differences",0))))
+                "sketch": max(0, min(25, int(s.get("sketch", 0)))),
+                "description": max(0, min(25, int(s.get("description", 0)))),
+                "dimensions": max(0, min(25, int(s.get("dimensions", 0)))),
+                "scale": max(0, min(10, int(s.get("scale", 0)))),
+                "compass": max(0, min(10, int(s.get("compass", 0)))),
+                "differences": max(0, min(5, int(s.get("differences", 0))))
             }
             feedback = data.get("feedback", "Great job!").strip()
 
         total = sum(scores.values())
-
         # ONLY CHANGE: prettier HTML, same exact return style
         html = f"""
         <!DOCTYPE html>
@@ -81,7 +97,7 @@ def submit():
             <style>
                 body {{font-family: -apple-system,system-ui,sans-serif;background:#f9fafb;margin:0;padding:20px}}
                 .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
-                .header {{background:linear-gradient(135deg,#1e40af,#3b82f6);color:white;padding:70px 50px;text-align:center}}
+                .header {{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:70px 50px;text-align:center}}
                 .header h1 {{margin:0;font-size:52px;font-weight:900}}
                 .header .score {{font-size:110px;font-weight:900;margin:28px 0 0}}
                 .content {{padding:60px 70px}}
@@ -89,8 +105,8 @@ def submit():
                 tr {{border-bottom:1px solid #e2e8f0}}
                 td {{padding:22px 0}}
                 .label {{font-weight:600;color:#1e293b}}
-                .value {{text-align:right;font-weight:700;color:#1d4ed8}}
-                .feedback {{margin-top:60px;padding:36px;background:#f0fdf4;border-left:8px solid #22c55e;border-radius:18px;font-size:19px;line-height:1.9;color:#166534}}
+                .value {{text-align:right;font-weight:700;color:#6d28d9}}
+                .feedback {{margin-top:60px;padding:36px;background:#f3e8ff;border-left:8px solid #a78bfa;border-radius:18px;font-size:19px;line-height:1.9;color:#4c1d95}}
             </style>
         </head>
         <body>
@@ -118,10 +134,9 @@ def submit():
         </html>
         """
         return html, 200, {'Content-Type': 'text/html'}
-
-    except Exception:
-        return f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#ecfdf5'><h1 style='font-size:90px;color:#10b981;margin:0'>100/100</h1><p style='font-size:26px'><strong>{name}</strong> - Perfect score!</p></div>", 200, {'Content-Type': 'text/html'}
-
+    except Exception as e:
+        print("CRITICAL ERROR:", str(e))
+        return f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#fef2f2'><h1 style='font-size:90px;color:#ef4444;margin:0'>Error</h1><p style='font-size:26px'><strong>{name}</strong> - Something went wrong. Try again.</p></div>", 200, {'Content-Type': 'text/html'}
     finally:
         try:
             os.unlink(path)
