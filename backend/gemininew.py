@@ -21,9 +21,10 @@ if len(parts) != 2:
     raise RuntimeError("prompt.txt must contain '=== PROMPT ===' separator")
 RUBRIC_TEXT, PROMPT_TEMPLATE = parts[0].strip(), parts[1].strip()
 
-print("=== PROMPT SENT TO GEMINI ===")
-print(PROMPT_TEMPLATE)
-print("=== END PROMPT ===")
+# in the latest error 11/8 1:52 pm, these prints did not appear in the log
+print("=== PROMPT SENT TO GEMINI ===", flush=True)
+print(PROMPT_TEMPLATE, flush=True)
+print("=== END PROMPT ===", flush=True)
 
 def analyze_image(image_path: str):
     with open(image_path, "rb") as f:
