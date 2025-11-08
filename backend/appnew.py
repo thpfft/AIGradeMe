@@ -44,6 +44,8 @@ def submit():
     path = tmp.name
     try:
         result = gemini.analyze_image(path)
+        print("GEMINI CALL SUCCESSFUL. RESULT TYPE:", type(result))
+        
         try:
             raw = result["candidates"][0]["content"]["parts"][0]["text"]
         except:
