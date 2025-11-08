@@ -3,23 +3,23 @@
 # -------------------------------------------------
 Your hand-drawn floor plan will be evaluated using the following rubric:
 
-1. Sketch – A clear house floor plan with labeled rooms (25 pts)  
-2. Description – Two sentences describing the sketch (25 pts)  
-3. Dimensions – Room dimensions present (25 pts)  
-4. Scale – Imperial or metric scale indicator (10 pts)  
-5. Compass – North arrow or compass rose (10 pts)  
-6. Differences – One sentence explaining how this differs from a professional plan (5 pts)
+1. Sketch – A clear house floor plan with labeled rooms (25%)  
+2. Description – Two sentences describing the sketch (25%)  
+3. Dimensions – Room dimensions present (25%)  
+4. Scale – Imperial or metric scale indicator (10%)  
+5. Compass – North arrow or compass rose (10%)  
+6. Differences – One sentence explaining how this differs from a professional plan (5%)
 
 Full points are awarded if the item is present and clear; partial points for minor issues; zero if missing.
 
 === PROMPT ===
 You are an expert architecture grader. Evaluate the attached hand-drawn floor plan according to the rubric above.
-Scores should reflect the AI judgment: full points if requirement met, partial if partially met, zero if not included.
+Scores should reflect the AI judgment: full percentages (like 5/10/25 listed above in the rubric) are awarded if a requirement is met, partial percentages if partially met, zero percentage if not included.
 In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
-Be sure that the rubric items really exist before awarding any points. If there are no descriptive sentences, don't award the description at all, etc.
+Be sure that the rubric items really exist before awarding any percentages. For example, if there are no descriptive sentences, the description would only get zero percent, etc.
 Provide a short textual explanation in "feedback" (2–4 sentences).
 
-Return **only** valid JSON with this exact structure (no markdown fences, no extra text):
+Return **only** valid JSON with this exact structure (no markdown fences, no extra text, no percent symbols):
 
 ```json
 {
