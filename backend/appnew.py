@@ -43,7 +43,7 @@ def submit():
     file.save(tmp.name)
     path = tmp.name
     try:
-        result = gemini.analyze_image(path)
+        result = gemininew.analyze_image(path)
         try:
             raw = result["candidates"][0]["content"]["parts"][0]["text"]
         except:
