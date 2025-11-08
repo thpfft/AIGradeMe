@@ -3,89 +3,71 @@
 # Date: 2025-11-05
 # Description: Handles calls to Gemini AI Vision API for grading.
 
+# utils/gemini.py
 import os
 import base64
 import requests
 import json
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
-if GEMINI_KEY is None:
-    raise RuntimeError("Error: GEMINI_API_KEY not set in environment")
+if not GEMINI_KEY:
+    raise RuntimeError("GEMINI_API_KEY not set")
 
-def analyze_image(image_path):
-    # Sends the uploaded image to Gemini AI for grading according to the rubric.
-    # Returns structured JSON including scores and feedback.
-    
-    # Rubric instructions for AI
-    rubric_instructions = """
-Evaluate this hand-drawn floor plan sketch according to the rubric:
-1. Sketch of a house floor plan, hand drawn, must include labeled rooms (25%).
-2. Two sentences describing what the sketch represents (25%).
-3. Dimensions of rooms must be present (25%).
-4. Scale indicator showing imperial or metric (10%).
-5. Compass included (10%).
-6. A sentence explaining how this differs from a professional plan (5%).
+# ----------------------------------------------------------------------
+# Load prompt.txt (must be in the same folder as this file)
+# ----------------------------------------------------------------------
+PROMPT_FILE = os.path.join(os.path.dirname(__file__), "..", "prompt.txt")
+with open(PROMPT_FILE, "r", encoding="utf-8") as f:
+    txt = f.read().strip()
 
-Please return JSON with the following fields:
-{
-  "scores": {
-    "sketch": int,
-    "description": int,
-    "dimensions": int,
-    "scale": int,
-    "compass": int,
-    "differences": int
-  },
-  "feedback": str
-}
+# Split on the first blank line that follows a line containing "=== PROMPT ==="
+# Anything before is the rubric, anything after is the real prompt.
+parts = txt.split("\n=== PROMPT ===\n", 1)
+if len(parts) != 2:
+    raise RuntimeError("prompt.txt must contain exactly one '=== PROMPT ===' separator")
 
-- Scores should reflect the AI judgment: full points if requirement met, partial if partially met, zero if not included.
-- In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible
-- Provide a short textual explanation in "feedback" (2–4 sentences).
-- Output must be valid JSON only, no extra commentary.
-"""
+RUBRIC_TEXT, PROMPT_TEMPLATE = parts[0].strip(), parts[1].strip()
 
-    # Encode image to base64
+
+def analyze_image(image_path: str):
+    """
+    Sends the image to Gemini and returns the raw Gemini JSON.
+    The caller (appnew.py) will parse the JSON into scores/feedback.
+    """
+    # Encode image
     with open(image_path, "rb") as f:
-        encoded_image = base64.b64encode(f.read()).decode("utf-8")
+        encoded = base64.b64encode(f.read()).decode("utf-8")
 
-    url = (
-        "https://generativelanguage.googleapis.com/v1beta/"
-        "models/gemini-2.5-flash-lite:generateContent"
-        f"?key={GEMINI_KEY}"
+    # MIME type
+    ext = os.path.splitext(image_path)[1].lower()
+    mime = {"jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png"}.get(
+        ext.lstrip("."), "application/octet-stream"
     )
 
-
-    # Determine MIME type based on file extension
-    ext = os.path.splitext(image_path)[1].lower()
-    if ext in [".jpg", ".jpeg"]:
-        mime_type = "image/jpeg"
-    elif ext == ".png":
-        mime_type = "image/png"
-    else:
-        mime_type = "application/octet-stream"  # fallback, may still fail
-
+    # Build payload – the prompt is the *template* from prompt.txt
     payload = {
         "contents": [
             {
                 "parts": [
-                    {"text": rubric_instructions},
-                    {
-                        "inline_data": {
-                            "mime_type": mime_type,
-                            "data": encoded_image
-                        }
-                    }
+                    {"text": PROMPT_TEMPLATE},
+                    {"inline_data": {"mime_type": mime, "data": encoded}},
                 ]
             }
         ]
     }
-    
-    response = requests.post(url, json=payload)
-    if response.status_code == 200:
-        return response.json()
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+    resp = requests.post(url, json=payload)
+
+    if resp.status_code == 200:
+        return resp.json()
     else:
         return {
             "success": False,
-            "details": f"Gemini API error ({response.status_code}): {response.text}",
+            "details": f"Gemini error {resp.status_code}: {resp.text}",
         }
+
+
+def get_rubric() -> str:
+    """Return the rubric text for display in the UI."""
+    return RUBRIC_TEXT
