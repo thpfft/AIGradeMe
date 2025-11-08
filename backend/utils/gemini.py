@@ -16,7 +16,7 @@ if not GEMINI_KEY:
 # ----------------------------------------------------------------------
 # Load prompt.txt (must be in the same folder as this file)
 # ----------------------------------------------------------------------
-PROMPT_FILE = os.path.join(os.path.dirname(__file__), "..", "backend", "prompt.txt")
+PROMPT_FILE = os.path.join(os.path.dirname(__file__), "..", "prompt.txt")
 with open(PROMPT_FILE, "r", encoding="utf-8") as f:
     txt = f.read().strip()
 
