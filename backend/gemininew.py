@@ -47,7 +47,9 @@ def analyze_image(image_path: str):
     payload = {
         "contents": [{"parts": [{"text": PROMPT_TEMPLATE}, {"inline_data": {"mime_type": mime, "data": encoded}}]}]
     }
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+
+    # url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
     resp = requests.post(url, json=payload)
     return resp.json() if resp.status_code == 200 else {"success": False, "details": resp.text}
 
