@@ -1,26 +1,35 @@
-Evaluate this hand-drawn floor plan sketch according to the rubric:
-1. Sketch of a house floor plan, hand drawn, must include labeled rooms (25%).
-2. Two sentences describing what the sketch represents (25%).
-3. Dimensions of rooms must be present (25%).
-4. Scale indicator showing imperial or metric (10%).
-5. Compass included (10%).
-6. A sentence explaining how this differs from a professional plan (5%).
+# -------------------------------------------------
+# RUBRIC (available in the app)
+# -------------------------------------------------
+Evaluate the hand-drawn floor plan using the following rubric:
 
-Please return JSON with the following fields:
+1. Sketch – A clear house floor plan with labeled rooms (25 pts)  
+2. Description – Two sentences describing the sketch (25 pts)  
+3. Dimensions – Room dimensions present (25 pts)  
+4. Scale – Imperial or metric scale indicator (10 pts)  
+5. Compass – North arrow or compass rose (10 pts)  
+6. Differences – One sentence explaining how this differs from a professional plan (5 pts)
+
+Full points are awarded if the item is present and clear; partial points for minor issues; zero if missing.
+
+=== PROMPT ===
+You are an expert architecture grader. Evaluate the attached hand-drawn floor plan according to the rubric above.
+Scores should reflect the AI judgment: full points if requirement met, partial if partially met, zero if not included.
+In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
+Be sure that the rubric items really exist before awarding any points. If there are no descriptive sentences, don't award the description at all, etc.
+Provide a short textual explanation in "feedback" (2–4 sentences).
+
+Return **only** valid JSON with this exact structure (no markdown fences, no extra text):
+
+```json
 {
   "scores": {
-    "sketch": int,
-    "description": int,
-    "dimensions": int,
-    "scale": int,
-    "compass": int,
-    "differences": int
+    "sketch": 0,
+    "description": 0,
+    "dimensions": 0,
+    "scale": 0,
+    "compass": 0,
+    "differences": 0
   },
-  "feedback": str
+  "feedback": "Short 2-4 sentence explanation."
 }
-
-Rules:
-- Be generous: full points if reasonably present
-- Partial credit OK, zero only if completely missing
-- Feedback: 2–4 sentences, friendly and clear
-- Output ONLY valid JSON. No markdown. No explanations.
