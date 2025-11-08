@@ -1,7 +1,7 @@
 # -------------------------------------------------
-# RUBRIC (available in the app)
+# RUBRIC (graded requirements)
 # -------------------------------------------------
-Evaluate the hand-drawn floor plan using the following rubric:
+Your hand-drawn floor plan will be evaluated using the following rubric:
 
 1. Sketch – A clear house floor plan with labeled rooms (25 pts)  
 2. Description – Two sentences describing the sketch (25 pts)  
