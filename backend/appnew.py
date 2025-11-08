@@ -142,6 +142,11 @@ def submit():
 def home():
     return "Ready."
 
+@app.route("/rubric", methods=["GET"])
+def rubric():
+    # Return the student-facing rubric from prompt.txt
+    return get_rubric(), 200, {"Content-Type": "text/plain; charset=utf-8"}
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
