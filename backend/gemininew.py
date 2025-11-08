@@ -7,6 +7,16 @@ import os
 import base64
 import requests
 import json
+import logging
+import sys
+
+# Configure logging to output to STDOUT
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    # Explicitly set the handler to stream to stdout for Render compatibility
+    handlers=[logging.StreamHandler(sys.stdout)] 
+)
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_KEY:
@@ -22,9 +32,12 @@ if len(parts) != 2:
 RUBRIC_TEXT, PROMPT_TEMPLATE = parts[0].strip(), parts[1].strip()
 
 # in the latest error 11/8 1:52 pm, these prints did not appear in the log
-print("=== PROMPT SENT TO GEMINI ===", flush=True)
-print(PROMPT_TEMPLATE, flush=True)
-print("=== END PROMPT ===", flush=True)
+# print("=== PROMPT SENT TO GEMINI ===", flush=True)
+# print(PROMPT_TEMPLATE, flush=True)
+# print("=== END PROMPT ===", flush=True)
+logging.info("=== PROMPT SENT TO GEMINI ===")
+logging.info(PROMPT_TEMPLATE)
+logging.info("=== END PROMPT ===")
 
 def analyze_image(image_path: str):
     with open(image_path, "rb") as f:
