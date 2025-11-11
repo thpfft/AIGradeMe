@@ -69,11 +69,19 @@ def analyze_image(image_path: str):
     )
 
     try:
-        # === xAI SDK Call (official conversation API) ===
-        chat = client.chat.create(model="grok-4-0709")
-        chat.append_user_message(PROMPT_TEMPLATE)
-        chat.append_user_image(f"data:{mime};base64,{encoded}")
-        response = chat.sample()
+        # === xAI SDK Call (current method — no append_user_message) ===
+        response = client.chat.create(
+            model="grok-4-0709",
+            messages=[{
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": PROMPT_TEMPLATE},
+                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}}
+                ]
+            }],
+            temperature=0.3,
+            max_tokens=400
+        )
         
         content = response.content
         logging.info("Grok response received")
