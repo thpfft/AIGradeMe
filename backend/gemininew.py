@@ -69,11 +69,11 @@ def analyze_image(image_path: str):
     )
 
     try:
-        # === xAI SDK Call (using Role enums) ===
+        # === xAI SDK Call (strings for roles, no enum) ===
         response = client.chat.create(
             model="grok-4-0709",
             messages=[{
-                "role": Role.user,  # ← Fix: Use Role.user enum instead of string "user"
+                "role": "user",
                 "content": [
                     {"type": "text", "text": PROMPT_TEMPLATE},
                     {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}}
