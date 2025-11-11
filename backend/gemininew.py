@@ -9,7 +9,6 @@ import requests
 import json
 import logging
 import sys
-from xai_sdk import Client
 
 # Configure logging to output to STDOUT
 logging.basicConfig(
@@ -40,9 +39,6 @@ logging.info("=== PROMPT SENT ===")
 logging.info(PROMPT_TEMPLATE)
 logging.info("=== END PROMPT ===")
 
-# === xAI Client ===
-client = Client(api_key=GROK_KEY)
-
 # def analyze_image(image_path: str):
 #     with open(image_path, "rb") as f:
 #         encoded = base64.b64encode(f.read()).decode("utf-8")
@@ -68,31 +64,36 @@ def analyze_image(image_path: str):
         ext.lstrip("."), "application/octet-stream"
     )
 
-    try:
-        # === xAI SDK Call (strings for roles, no enum) ===
-        response = client.chat.create(
-            model="grok-4-0709",
-            messages=[{
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": PROMPT_TEMPLATE},
-                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}}
-                ]
-            }],
-            temperature=0.3,
-            max_tokens=400
-        )
-        
-        content = response.content
+    # === RAW REQUESTS FOR GROK (OpenAI endpoint) ===
+    headers = {
+        "Authorization": f"Bearer {GROK_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": "grok-4-0709",
+        "messages": [{
+            "role": "user",  # ← String "user" — no enums
+            "content": [
+                {"type": "text", "text": PROMPT_TEMPLATE},
+                {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}}
+            ]
+        }],
+        "temperature": 0.3,
+        "max_tokens": 400
+    }
+    url = "https://api.x.ai/v1/chat/completions"  # ← Official endpoint
+
+    resp = requests.post(url, json=payload, headers=headers)
+    
+    if resp.status_code == 200:
         logging.info("Grok response received")
-        
+        content = resp.json()["choices"][0]["message"]["content"]
         # Return Gemini-compatible structure
         return {"candidates": [{"content": {"parts": [{"text": content}]}}]}
-
-    except Exception as e:
-        error_msg = f"Grok API error: {str(e)}"
-        logging.error(error_msg)
-        return {"success": False, "details": error_msg}
+    else:
+        error = f"Grok error {resp.status_code}: {resp.text[:200]}"
+        logging.error(error)
+        return {"success": False, "details": error}
 
 def get_rubric() -> str:
     return RUBRIC_TEXT
