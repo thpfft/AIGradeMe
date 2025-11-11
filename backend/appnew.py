@@ -50,8 +50,8 @@ def submit():
             raw = str(result)
         data = extract_json(raw)
         
-        # === DEBUG: See what Gemini returns ===
-        print("RAW GEMINI RESPONSE:", raw)
+        # === DEBUG: See what AI API returns ===
+        print("RAW API RESPONSE:", raw)
         
         if not data or "scores" not in data:
             # === HONEST FALLBACK: No more fake 100% ===
