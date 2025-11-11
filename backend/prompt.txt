@@ -1,6 +1,6 @@
-# -------------------------------------------------
+
 # RUBRIC (graded requirements)
-# -------------------------------------------------
+# ----------------------------
 Your hand-drawn floor plan will be evaluated using the following rubric:
 
 1. Sketch – A clear house floor plan with labeled rooms (25%)  
