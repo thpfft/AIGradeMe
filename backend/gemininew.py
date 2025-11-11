@@ -36,7 +36,7 @@ if len(parts) != 2:
     raise RuntimeError("prompt.txt must contain '=== PROMPT ===' separator")
 RUBRIC_TEXT, PROMPT_TEMPLATE = parts[0].strip(), parts[1].strip()
 
-logging.info("=== PROMPT SENT TO GEMINI ===")
+logging.info("=== PROMPT SENT ===")
 logging.info(PROMPT_TEMPLATE)
 logging.info("=== END PROMPT ===")
 
@@ -69,12 +69,12 @@ def analyze_image(image_path: str):
     )
 
     try:
-        # === xAI SDK Call ===
-        response = client.chat.create(model="grok-4-0709")  # Grok-4 (multimodal)
-        response.append_user_message(PROMPT_TEMPLATE)
-        response.append_user_image(f"data:{mime};base64,{encoded}")
-        response = response.sample()
-
+        # === xAI SDK Call (official conversation API) ===
+        chat = client.chat.create(model="grok-4-0709")
+        chat.append_user_message(PROMPT_TEMPLATE)
+        chat.append_user_image(f"data:{mime};base64,{encoded}")
+        response = chat.sample()
+        
         content = response.content
         logging.info("Grok response received")
         
