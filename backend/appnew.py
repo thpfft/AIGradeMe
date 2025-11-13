@@ -101,16 +101,16 @@ try:
                 <div class="header">
                     <h1>Grade Report</h1>
                     <p style="margin:16px 0 0;font-size:26px"><strong>{name}</strong></p>
-                    <div class="score">{total}/100</div>
+                    <div class="score">{total}</div>
                 </div>
                 <div class="content">
                     <table>
-                        <tr><td class="label">Sketch Quality</td><td class="value">{scores['sketch']}/25</td></tr>
-                        <tr><td class="label">Description</td><td class="value">{scores['description']}/25</td></tr>
-                        <tr><td class="label">Dimensions</td><td class="value">{scores['dimensions']}/25</td></tr>
-                        <tr><td class="label">Scale</td><td class="value">{scores['scale']}/10</td></tr>
-                        <tr><td class="label">Compass</td><td class="value">{scores['compass']}/10</td></tr>
-                        <tr><td class="label">Differences Noted</td><td class="value">{scores['differences']}/5</td></tr>
+                        <tr><td class="label">{score_items[0][0]}</td><td class="value">{score_items[0][1]}</td></tr>
+                        <tr><td class="label">{score_items[1][0]}</td><td class="value">{score_items[1][1]}</td></tr>
+                        <tr><td class="label">{score_items[2][0]}</td><td class="value">{score_items[2][1]}</td></tr>
+                        <tr><td class="label">{score_items[3][0]}</td><td class="value">{score_items[3][1]}</td></tr>
+                        <tr><td class="label">{score_items[4][0]}</td><td class="value">{score_items[4][1]}</td></tr>
+                        <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
                     </table>
                     <div class="feedback">
                         <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
@@ -121,14 +121,17 @@ try:
         </html>
         """
         return html, 200, {'Content-Type': 'text/html'}
-    except Exception as e:
-        print("CRITICAL ERROR:", str(e))
-        return f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#fef2f2'><h1 style='font-size:90px;color:#ef4444;margin:0'>Error</h1><p style='font-size:26px'><strong>{name}</strong> - Something went wrong. Try again.</p></div>", 200, {'Content-Type': 'text/html'}
-    finally:
-        try:
-            os.unlink(path)
-        except:
-            pass
+
+        except Exception as e:
+            print(f"CRITICAL ERROR ({type(e).__name__}): {e}")
+            return (
+                f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#fef2f2'>"
+                f"<h1 style='font-size:90px;color:#ef4444;margin:0'>Error</h1>"
+                f"<p style='font-size:26px'><strong>{name}</strong> — Something went wrong. Try again.</p>"
+                f"</div>",
+                500,  # Correct status code
+                {'Content-Type': 'text/html'}
+            )
 
 @app.route("/", methods=["GET"])
 def home():
