@@ -1,6 +1,6 @@
 
-# RUBRIC (graded requirements)
-# ----------------------------
+RUBRIC (graded requirements)
+----------------------------
 Your hand-drawn floor plan will be evaluated using the following rubric:
 
 1. Sketch – A clear house floor plan with labeled rooms (25%)  
@@ -15,6 +15,7 @@ Full points are awarded if the item is present and clear; partial points for min
 === PROMPT ===
 You are an expert architecture grader. Evaluate the attached hand-drawn floor plan according to the rubric above.
 Scores should reflect the AI judgment: full percentages (like 5/10/25 listed above in the rubric) are awarded if a requirement is met, partial percentages if partially met, zero percentage if not included.
+Note that the possible score should add up to 100, so the total is out of 100.
 In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
 Be sure that the rubric items really exist before awarding any percentages. For example, if there are no descriptive sentences, the description would only get zero percent, etc.
 Provide a short textual explanation in "feedback" (2–4 sentences).
