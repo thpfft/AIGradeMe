@@ -19,20 +19,20 @@ The best possible score for each category is listed above (percentage in parenth
 Note that the total possible score (from all 6 categories) should add up to 100, so the total score will be out of 100 possible points.
 In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
 Be sure that the rubric items really exist before awarding any percentages. For example, if there are no descriptive sentences, the description would only get zero percent, etc.
-Return scores in the format "22/25" (score/possible) for each rubric category. Example: "Sketch" : "22/25" and "Compass" : "10/10".
+Return scores in the format "22/25" (score/possible) for each rubric category. Example: "sketch" : "22/25" and "compass" : "10/10".
 Provide a short textual explanation in "feedback" (2–4 sentences).
 
-Return **only** valid JSON with this exact structure below (no markdown fences, no extra text, no percent symbols). Reminder that category names are what are shown in the rubric 1-6 items above, that x will be the score you assign for each category (like 22), and that y will be best possible score for each category (the number in the parentheses in the rubric above).
+Return **only** valid JSON with this exact structure below (no markdown fences, no extra text, no percent symbols).
 
 ```json
 {
   "scores": {
-    "category 1 name": "x/y",
-    "category 2 name": "x/y",
-    "category 3 name": "x/y",
-    "category 4 name": "x/y",
-    "category 5 name": "x/y",
-    "category 6 name": "x/y"
+    "sketch": "x/25",
+    "description": "x/25",
+    "dimensions": "x/25",
+    "scale": "x/10",
+    "compass": "x/10",
+    "differences": "x/5"
   },
   "feedback": "Short 2-4 sentence explanation."
 }
