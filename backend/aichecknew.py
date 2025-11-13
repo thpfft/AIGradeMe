@@ -115,7 +115,7 @@ def analyze_image(image_path: str):
         ]
     }
 
-    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
     
     resp = requests.post(url, json=payload)
     
