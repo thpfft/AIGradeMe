@@ -63,7 +63,8 @@ def submit():
             score_items = []
             for label, value in items:
                 try:
-                    val = int(value)
+                    # val = int(value)
+                    val = int(value.split("/")[0])
                 except:
                     val = 0
                 score_items.append((label.replace("_", " ").title(), val))
