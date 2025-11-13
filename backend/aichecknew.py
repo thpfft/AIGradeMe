@@ -117,13 +117,14 @@ def analyze_image(image_path: str):
 
     url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
     
-    resp = requests.post(url, json=payload)
-    
-    if resp.status_code == 200:
-        return resp.json()
-    else:
-        print(f"Gemini error {resp.status_code}: {resp.text[:200]}")
-        return {"success": False, "details": resp.text}
+    try:
+        resp = requests.post(url, json=payload, timeout=30)
+        if resp.status_code != 200:
+            return {"ai_error": "AI model may be overloaded. Please try again later."}
+    except:
+            return {"ai_error": "AI model may be overloaded. Please try again later."}
+        
+    return resp.json()
 
 def get_rubric() -> str:
     return RUBRIC_TEXT
