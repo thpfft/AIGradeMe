@@ -1,7 +1,7 @@
 # utils/gemininew.py
 # Author: Ron Goodson
 # Date: 2025-11-05
-# Description: Handles calls to Gemini AI Vision API for grading.
+# Description: Handles calls to AI API for grading.
 
 import os
 import base64
@@ -70,7 +70,7 @@ def analyze_image(image_path: str):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "grok-beta",
+        "model": "grok-3-fast",
         "messages": [{
             "role": "user",  # ← String "user" — no enums
             "content": [
@@ -81,7 +81,7 @@ def analyze_image(image_path: str):
         "temperature": 0.3,
         "max_tokens": 400
     }
-    url = "https://api.x.ai/v1/chat/completions"  # ← Official endpoint
+    url = "https://api.x.ai/v1/chat/completions"
 
     resp = requests.post(url, json=payload, headers=headers)
     
