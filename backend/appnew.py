@@ -64,11 +64,11 @@ def submit():
                 items += [("Score", 0)] * (6 - len(items))
             score_items = []
             for label, value in items:
-                try:
-                    # val = int(value)
-                    val = int(value.split("/")[0])
-                except:
-                    val = 0
+                #try:
+                #    # val = int(value)
+                #    val = int(value.split("/")[0])
+                #except:
+                #    val = 0
                 score_items.append((label.replace("_", " ").title(), val))
             feedback = data.get("feedback", "Great job!").strip()
         total = sum(val for _, val in score_items)
