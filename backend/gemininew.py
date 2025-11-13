@@ -1,4 +1,4 @@
-# utils/gemini.py
+# utils/gemininew.py
 # Author: Ron Goodson
 # Date: 2025-11-05
 # Description: Handles calls to Gemini AI Vision API for grading.
@@ -70,7 +70,7 @@ def analyze_image(image_path: str):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "grok-4-0709",
+        "model": "grok-beta",
         "messages": [{
             "role": "user",  # ← String "user" — no enums
             "content": [
