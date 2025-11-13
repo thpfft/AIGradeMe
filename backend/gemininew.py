@@ -70,7 +70,7 @@ def analyze_image(image_path: str):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "grok-3-fast",
+        "model": "grok-4-0709",
         "messages": [{
             "role": "user",  # ← String "user" — no enums
             "content": [
