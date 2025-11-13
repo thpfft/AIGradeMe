@@ -46,6 +46,8 @@ def submit():
    
     try:
         result = analyze_image(path)
+        if "ai_error" in result:
+            return f"<p style='text-align:center;color:#dc2626;font-size:18px;margin-top:40px;'>{name} — {result['ai_error']}</p>"
         raw = result["candidates"][0]["content"]["parts"][0]["text"]
         print("RAW API RESPONSE:", raw)
         data = extract_json(raw)
