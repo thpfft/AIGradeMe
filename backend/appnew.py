@@ -32,26 +32,23 @@ def extract_json(text):
 def submit():
     name = request.form.get("name", "Student").strip()
     email = request.form.get("email", "").strip()
-  
+ 
     if not name or not email or "image" not in request.files:
         return '<div style="color:red;font-weight:bold;">Missing name, email, or image</div>', 400
-        
+       
     file = request.files["image"]
     if not file or not file.filename:
         return '<div style="color:red;font-weight:bold;">No image selected</div>', 400
-
     suffix = os.path.splitext(secure_filename(file.filename))[1] or ".jpg"
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
     file.save(tmp.name)
     path = tmp.name
-    
-try:
+   
+    try:
         result = analyze_image(path)
         raw = result["candidates"][0]["content"]["parts"][0]["text"]
         print("RAW API RESPONSE:", raw)
-
         data = extract_json(raw)
-
         # === 6 SCORES: AI defines labels & values. No hardcoded names. ===
         if not data or "scores" not in data or not isinstance(data["scores"], dict):
             print("Fallback triggered.")
@@ -71,9 +68,8 @@ try:
                     val = 0
                 score_items.append((label.replace("_", " ").title(), val))
             feedback = data.get("feedback", "Great job!").strip()
-
         total = sum(val for _, val in score_items)
-    
+   
         # HTML Output
         html = f"""
         <!DOCTYPE html>
@@ -122,16 +118,21 @@ try:
         """
         return html, 200, {'Content-Type': 'text/html'}
 
-        except Exception as e:
-            print(f"CRITICAL ERROR ({type(e).__name__}): {e}")
-            return (
-                f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#fef2f2'>"
-                f"<h1 style='font-size:90px;color:#ef4444;margin:0'>Error</h1>"
-                f"<p style='font-size:26px'><strong>{name}</strong> — Something went wrong. Try again.</p>"
-                f"</div>",
-                500,  # Correct status code
-                {'Content-Type': 'text/html'}
-            )
+    except Exception as e:
+        print(f"CRITICAL ERROR ({type(e).__name__}): {e}")
+        return (
+            f"<div style='text-align:center;padding:100px;font-family:system-ui;background:#fef2f2'>"
+            f"<h1 style='font-size:90px;color:#ef4444;margin:0'>Error</h1>"
+            f"<p style='font-size:26px'><strong>{name}</strong> — Something went wrong. Try again.</p>"
+            f"</div>",
+            500,
+            {'Content-Type': 'text/html'}
+        )
+    finally:
+        try:
+            os.unlink(path)
+        except:
+            pass
 
 @app.route("/", methods=["GET"])
 def home():
