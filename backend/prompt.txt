@@ -18,7 +18,7 @@ Scores should reflect the AI judgment: full percentages (like 5/10/25 listed abo
 Note that the possible score should add up to 100, so the total is out of 100.
 In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
 Be sure that the rubric items really exist before awarding any percentages. For example, if there are no descriptive sentences, the description would only get zero percent, etc.
-Return scores in the format "22/25" for each rubric category. Example: "Sketch" : "22/25".
+Return scores in the format "22/25" (score/possible) for each rubric category. Example: "Sketch" : "22/25".
 Provide a short textual explanation in "feedback" (2–4 sentences).
 
 Return **only** valid JSON with this exact structure (no markdown fences, no extra text, no percent symbols):
@@ -26,12 +26,12 @@ Return **only** valid JSON with this exact structure (no markdown fences, no ext
 ```json
 {
   "scores": {
-    "sketch": 0,
-    "description": 0,
-    "dimensions": 0,
-    "scale": 0,
-    "compass": 0,
-    "differences": 0
+    "sketch": "22/25",
+    "description": "22/25",
+    "dimensions": "22/25",
+    "scale": "22/25",
+    "compass": "22/25",
+    "differences": "22/25"
   },
   "feedback": "Short 2-4 sentence explanation."
 }
