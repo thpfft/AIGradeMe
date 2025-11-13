@@ -124,7 +124,12 @@ def analyze_image(image_path: str):
     except:
             return {"ai_error": "AI model may be overloaded. Please try again later."}
         
-    return resp.json()
+    try:
+        return resp.json()
+    except:
+        return {"ai_error": "AI response error. Please try again later."}
+    
+    # return resp.json()
 
 def get_rubric() -> str:
     return RUBRIC_TEXT
