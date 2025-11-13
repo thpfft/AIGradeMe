@@ -35,54 +35,46 @@ def submit():
   
     if not name or not email or "image" not in request.files:
         return '<div style="color:red;font-weight:bold;">Missing name, email, or image</div>', 400
+        
     file = request.files["image"]
     if not file or not file.filename:
         return '<div style="color:red;font-weight:bold;">No image selected</div>', 400
+
     suffix = os.path.splitext(secure_filename(file.filename))[1] or ".jpg"
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
     file.save(tmp.name)
     path = tmp.name
-    try:
+    
+try:
         result = analyze_image(path)
-        try:
-            raw = result["candidates"][0]["content"]["parts"][0]["text"]
-        except:
-            raw = str(result)
-        data = extract_json(raw)
-        
-        # === DEBUG: See what AI API returns ===
+        raw = result["candidates"][0]["content"]["parts"][0]["text"]
         print("RAW API RESPONSE:", raw)
-        
-        if not data or "scores" not in data:
-            # === HONEST FALLBACK: No more fake 100% ===
-            print("Fallback triggered. Raw length:", len(raw) if raw else 0)
-            
-            if not raw or len(raw.strip()) < 30:
-                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
-                feedback = "No floor plan detected. Please upload a clear hand-drawn sketch with rooms, labels, dimensions, and scale."
 
-            elif any(word in raw.lower() for word in ["error", "invalid", "unsafe", "cannot", "unable"]):
-                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
-                feedback = "Image rejected: not a valid floor plan. Try a clearer drawing with labels and scale."
+        data = extract_json(raw)
 
-            else:
-                scores = {k: 0 for k in ["sketch","description","dimensions","scale","compass","differences"]}
-                feedback = "AI could not analyze this sketch. Please ensure it's a hand-drawn floor plan with visible details."
-
+        # === 6 SCORES: AI defines labels & values. No hardcoded names. ===
+        if not data or "scores" not in data or not isinstance(data["scores"], dict):
+            print("Fallback triggered.")
+            score_items = [("Score 1", 0), ("Score 2", 0), ("Score 3", 0), ("Score 4", 0), ("Score 5", 0), ("Score 6", 0)]
+            feedback = "AI could not process the image. Please try again."
         else:
-            s = data["scores"]
-            scores = {
-                "sketch": max(0, min(25, int(s.get("sketch",0)))),
-                "description": max(0, min(25, int(s.get("description",0)))),
-                "dimensions": max(0, min(25, int(s.get("dimensions",0)))),
-                "scale": max(0, min(10, int(s.get("scale",0)))),
-                "compass": max(0, min(10, int(s.get("compass",0)))),
-                "differences": max(0, min(5, int(s.get("differences",0))))
-            }
+            scores_dict = data["scores"]
+            # Take first 6 items (in order), convert to int
+            items = list(scores_dict.items())[:6]
+            if len(items) < 6:
+                items += [("Score", 0)] * (6 - len(items))
+            score_items = []
+            for label, value in items:
+                try:
+                    val = int(value)
+                except:
+                    val = 0
+                score_items.append((label.replace("_", " ").title(), val))
             feedback = data.get("feedback", "Great job!").strip()
 
-        total = sum(scores.values())
-        # ONLY CHANGE: prettier HTML, same exact return style
+        total = sum(val for _, val in score_items)
+    
+        # HTML Output
         html = f"""
         <!DOCTYPE html>
         <html>
