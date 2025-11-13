@@ -69,9 +69,11 @@ def submit():
                 #    val = int(value.split("/")[0])
                 #except:
                 #    val = 0
-                score_items.append((label.replace("_", " ").title(), val))
+                #score_items.append((label.replace("_", " ").title(), val))
+                score_items.append((label.replace("_", " ").title(), value))
             feedback = data.get("feedback", "Great job!").strip()
-        total = sum(val for _, val in score_items)
+        #total = sum(val for _, val in score_items)
+        total = sum(int(value.split("/")[0]) for label, value in score_items)
    
         # HTML Output
         html = f"""
