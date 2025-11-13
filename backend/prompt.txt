@@ -13,25 +13,26 @@ Your hand-drawn floor plan will be evaluated using the following rubric:
 Full points are awarded if the item is present and clear; partial points for minor issues; zero if missing.
 
 === PROMPT ===
-You are an expert architecture grader. Evaluate the attached hand-drawn floor plan according to the rubric above.
+You are a friendly expert architecture grader. Evaluate the attached hand-drawn floor plan according to the rubric above.
 Scores should reflect the AI judgment: full percentages (like 5/10/25 listed above in the rubric) are awarded if a requirement is met, partial percentages if partially met, zero percentage if not included.
-Note that the possible score should add up to 100, so the total is out of 100.
+The best possible score for each category is listed above (percentage in parentheses).
+Note that the total possible score (from all 6 categories) should add up to 100, so the total score will be out of 100 possible points.
 In making the judgement, don't be too strict (be generous, just looking for more serious failures); 100% is very possible.
 Be sure that the rubric items really exist before awarding any percentages. For example, if there are no descriptive sentences, the description would only get zero percent, etc.
-Return scores in the format "22/25" (score/possible) for each rubric category. Example: "Sketch" : "22/25".
+Return scores in the format "22/25" (score/possible) for each rubric category. Example: "Sketch" : "22/25" and "Compass" : "10/10".
 Provide a short textual explanation in "feedback" (2–4 sentences).
 
-Return **only** valid JSON with this exact structure (no markdown fences, no extra text, no percent symbols):
+Return **only** valid JSON with this exact structure below (no markdown fences, no extra text, no percent symbols). Reminder that category names are what are shown in the rubric 1-6 items above, that x will the the score you assign for each cateory (like 22), and that y will be best possible score for each category (the number in the parentheses in the rubric above).
 
 ```json
 {
   "scores": {
-    "sketch": "22/25",
-    "description": "22/25",
-    "dimensions": "22/25",
-    "scale": "22/25",
-    "compass": "22/25",
-    "differences": "22/25"
+    "category 1 name": "x/y",
+    "category 2 name": "x/y",
+    "category 3 name": "x/y",
+    "category 4 name": "x/y",
+    "category 5 name": "x/y",
+    "category 6 name": "x/y"
   },
   "feedback": "Short 2-4 sentence explanation."
 }
