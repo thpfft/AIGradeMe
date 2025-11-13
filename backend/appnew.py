@@ -7,7 +7,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from gemininew import analyze_image, get_rubric
+from aichecknew import analyze_image, get_rubric
 import os
 import tempfile
 import json
