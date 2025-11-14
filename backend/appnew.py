@@ -78,143 +78,61 @@ def submit():
         # HTML Output
         html = f"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html>
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>aiGradeMe – Grade Report for {name}</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Grade Report – {name}</title>
             <style>
-                :root {{
-                    --gray-50: #f8fafc;
-                    --gray-100: #f1f5f9;
-                    --gray-300: #cbd5e1;
-                    --gray-600: #475569;
-                    --gray-800: #1e293b;
-                    --gray-900: #0f172a;
-                    --purple: #6d28d9;
-                    --purple-dark: #5b21b6;
+                body {{font-family: -apple-system,system-ui,sans-serif;background:#f9fafb;margin:0;padding:20px}}
+                .card {{max-width:820px;margin:40px auto;background:white;border-radius:24px;overflow:hidden;
+                        box-shadow:0 20px 50px rgba(0,0,0,0.1);border:1px solid #e2e8f0}}
+                .header {{background:white;padding:40px 50px;text-align:center;border-bottom:1px solid #e2e8f0}}
+                .header h1 {{margin:0;font-size:38px;font-weight:800;color:#1e293b}}
+                .header p {{margin:8px 0 0;color:#64748b;font-size:18px}}
+                .content {{padding:50px 70px}}
+                table {{width:100%;font-size:21px;border-collapse:collapse}}
+                tr {{border-bottom:1px solid #e2e8f0}}
+                td {{padding:18px 0}}
+                .label {{font-weight:600;color:#1e293b;width:65%}}
+                .value {{text-align:right;font-weight:700;color:#6d28d9;font-size:24px}}
+                .total {{text-align:center;padding:30px;font-size:32px;font-weight:900;color:#1e293b;background:#f8fafc}}
+                .feedback {{margin-top:50px;padding:32px;background:#f1f5f9;border-left:6px solid #64748b;
+                            border-radius:12px;font-size:18px;line-height:1.8;color:#1e293b}}
+                .action {{text-align:center;margin-top:40px;padding:20px}}
+                .btn {{display:inline-block;background:#6d28d9;color:white;padding:16px 40px;
+                       border-radius:12px;font-size:18px;font-weight:700;text-decoration:none}}
+                .btn:hover {{background:#5b21b6}}
+                @media(max-width:640px){{
+                    .content{{padding:40px 30px}}.header{{padding:30px 20px}}
                 }}
-                * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-                body {{
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                    background: var(--gray-50);
-                    color: var(--gray-800);
-                    line-height: 1.6;
-                    padding: 2rem 1rem;
-                }}
-                .card {{
-                    max-width: 800px;
-                    margin: 0 auto;
-                    background: white;
-                    border-radius: 1.5rem;
-                    overflow: hidden;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-                    border: 1px solid var(--gray-300);
-                }}
-                @media (max-width: 640px) {{
-                    body {{ padding: 1rem 0.5rem; }}
-                    .card {{ border-radius: 1rem; }}
-                }}
-
-                .header {{
-                    background: white;
-                    padding: 2.5rem 2rem;
-                    text-align: center;
-                    border-bottom: 1px solid var(--gray-300);
-                }}
-                .header h1 {{
-                    font-size: 2.25rem;
-                    font-weight: 800;
-                    color: var(--gray-900);
-                    margin: 0;
-                }}
-                .header p {{
-                    margin: 0.75rem 0 0;
-                    color: var(--gray-600);
-                    font-size: 1.1rem;
-                }}
-
-                .scores {{
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 2rem 0;
-                }}
-                .scores td {{
-                    padding: 1rem 0;
-                    border-bottom: 1px solid var(--gray-300);
-                }}
-                .label {{ font-weight: 600; color: var(--gray-900); }}
-                .value {{ text-align: right; font-weight: 700; color: var(--purple); font-size: 1.25rem; }}
-
-                .total {{
-                    text-align: center;
-                    padding: 1.5rem;
-                    font-size: 1.75rem;
-                    font-weight: 800;
-                    color: var(--gray-900);
-                    background: var(--gray-100);
-                }}
-
-                .feedback {{
-                    background: var(--gray-100);
-                    padding: 2rem;
-                    border-radius: 1rem;
-                    margin: 2rem 0;
-                    border-left: 6px solid var(--gray-600);
-                }}
-                .feedback h2 {{
-                    margin: 0 0 1rem;
-                    font-size: 1.5rem;
-                    color: var(--gray-900);
-                }}
-                .feedback p {{
-                    margin: 0.75rem 0;
-                    color: var(--gray-800);
-                }}
-
-                .action {{
-                    text-align: center;
-                    padding: 2rem;
-                }}
-                .btn {{
-                    display: inline-block;
-                    background: var(--purple);
-                    color: white;
-                    padding: 1rem 2.5rem;
-                    border-radius: 1rem;
-                    font-size: 1.125rem;
-                    font-weight: 700;
-                    text-decoration: none;
-                    transition: background 0.2s;
-                }}
-                .btn:hover {{ background: var(--purple-dark); }}
             </style>
         </head>
         <body>
             <div class="card">
-                <!-- Header -->
-                <header class="header">
+                <div class="header">
                     <h1>{name}'s Grade Report</h1>
-                    <p>AI evaluation complete</p>
-                </header>
+                    <p>Instant AI evaluation</p>
+                </div>
+                <div class="content">
+                    <table>
+                        <tr><td class="label">{score_items[0][0]}</td><td class="value">{score_items[0][1]}</td></tr>
+                        <tr><td class="label">{score_items[1][0]}</td><td class="value">{score_items[1][1]}</td></tr>
+                        <tr><td class="label">{score_items[2][0]}</td><td class="value">{score_items[2][1]}</td></tr>
+                        <tr><td class="label">{score_items[3][0]}</td><td class="value">{score_items[3][1]}</td></tr>
+                        <tr><td class="label">{score_items[4][0]}</td><td class="value">{score_items[4][1]}</td></tr>
+                        <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
+                    </table>
 
-                <!-- Scores -->
-                <table class="scores">
-                    {"".join(f'<tr><td class="label">{label}</td><td class="value">{value}</td></tr>' for label, value in score_items)}
-                </table>
+                    <div class="total">Total Score: {total}/100</div>
 
-                <!-- Total -->
-                <div class="total">Total Score: {total}/100</div>
+                    <div class="feedback">
+                        <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
+                    </div>
 
-                <!-- AI Feedback -->
-                <section class="feedback">
-                    <h2>AI Feedback</h2>
-                    <p>{feedback.replace(chr(10), '<br>')}</p>
-                </section>
-
-                <!-- Action -->
-                <div class="action">
-                    <a href="/" class="btn">Grade Another Sketch</a>
+                    <div class="action">
+                        <a href="/" class="btn">Grade Another Sketch</a>
+                    </div>
                 </div>
             </div>
         </body>
