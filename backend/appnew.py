@@ -87,9 +87,7 @@ def submit():
                 .value {{text-align:right;font-weight:700;color:#1d4ed8}}
                 .feedback {{margin-top:60px;padding:36px;background:#dbdbdb;border-left:8px solid #777777;border-radius:18px;font-size:19px;line-height:1.9;color:#222222}}
                 #uploadForm {{display: none;}}
-                .rubric-btn {{display: none;}}
-  }
-                
+                .rubric-btn {{display: none;}}   
         </style>        
         <div class="card">
             <div class="grade-report-header">
