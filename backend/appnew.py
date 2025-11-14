@@ -77,49 +77,27 @@ def submit():
    
         # HTML Output
         html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <style>
-                body {{font-family: -apple-system,system-ui,sans-serif;background:#f9fafb;margin:0;padding:20px}}
-                .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
-                .header {{background:linear-gradient(135deg,#6b46c1,#a78bfa);color:white;padding:70px 50px;text-align:center}}
-                .header h1 {{margin:0;font-size:52px;font-weight:900}}
-                .header .score {{font-size:110px;font-weight:900;margin:28px 0 0}}
-                .content {{padding:60px 70px}}
-                table {{width:100%;font-size:21px;border-collapse:collapse}}
-                tr {{border-bottom:1px solid #e2e8f0}}
-                td {{padding:22px 0}}
-                .label {{font-weight:600;color:#1e293b}}
-                .value {{text-align:right;font-weight:700;color:#1d4ed8}}
-                .feedback {{margin-top:60px;padding:36px;background:#f0fdf4;border-left:8px solid #22c55e;border-radius:18px;font-size:19px;line-height:1.9;color:#166534}}
-            </style>
-        </head>
-        <body>
-            <div class="card">
-                <div class="header">
-                    <h1>Grade Report</h1>
-                    <p style="margin:16px 0 0;font-size:26px"><strong>{name}</strong></p>
-                    <div class="score">{total}</div>
-                </div>
-                <div class="content">
-                    <table>
-                        <tr><td class="label">{score_items[0][0]}</td><td class="value">{score_items[0][1]}</td></tr>
-                        <tr><td class="label">{score_items[1][0]}</td><td class="value">{score_items[1][1]}</td></tr>
-                        <tr><td class="label">{score_items[2][0]}</td><td class="value">{score_items[2][1]}</td></tr>
-                        <tr><td class="label">{score_items[3][0]}</td><td class="value">{score_items[3][1]}</td></tr>
-                        <tr><td class="label">{score_items[4][0]}</td><td class="value">{score_items[4][1]}</td></tr>
-                        <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
-                    </table>
-                    <div class="feedback">
-                        <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
-                    </div>
+        <div class="card">
+            <div class="grade-report-header">
+                <h1>{name}'s Grade Report</h1>
+                <div class="score-display">{total}/100</div>
+            </div>
+
+            <div style="padding:0 70px 50px">
+                <table style="width:100%;border-collapse:collapse;font-size:21px">
+                    <tr><td class="label">{score_items[0][0]}</td><td class="value">{score_items[0][1]}</td></tr>
+                    <tr><td class="label">{score_items[1][0]}</td><td class="value">{score_items[1][1]}</td></tr>
+                    <tr><td class="label">{score_items[2][0]}</td><td class="value">{score_items[2][1]}</td></tr>
+                    <tr><td class="label">{score_items[3][0]}</td><td class="value">{score_items[3][1]}</td></tr>
+                    <tr><td class="label">{score_items[4][0]}</td><td class="value">{score_items[4][1]}</td></tr>
+                    <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
+                </table>
+
+                <div class="feedback-box">
+                    <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
                 </div>
             </div>
-        </body>
-        </html>
+        </div>
         """
         return html, 200, {'Content-Type': 'text/html'}
 
