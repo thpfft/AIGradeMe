@@ -85,7 +85,7 @@ def submit():
             <style>
                 body {{font-family: -apple-system,system-ui,sans-serif;background:#f9fafb;margin:0;padding:20px}}
                 .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
-                .header {{background:linear-gradient(135deg,#1e40af,#3b82f6);color:white;padding:70px 50px;text-align:center}}
+                .header {{background:linear-gradient(135deg,#6b46c1,#a78bfa);color:white;padding:70px 50px;text-align:center}}
                 .header h1 {{margin:0;font-size:52px;font-weight:900}}
                 .header .score {{font-size:110px;font-weight:900;margin:28px 0 0}}
                 .content {{padding:60px 70px}}
