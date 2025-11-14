@@ -82,37 +82,27 @@ def submit():
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Grade Report – {name}</title>
             <style>
                 body {{font-family: -apple-system,system-ui,sans-serif;background:#f9fafb;margin:0;padding:20px}}
-                .card {{max-width:820px;margin:40px auto;background:white;border-radius:24px;overflow:hidden;
-                        box-shadow:0 20px 50px rgba(0,0,0,0.1);border:1px solid #e2e8f0}}
-                .header {{background:white;padding:40px 50px;text-align:center;border-bottom:1px solid #e2e8f0}}
-                .header h1 {{margin:0;font-size:38px;font-weight:800;color:#1e293b}}
-                .header p {{margin:8px 0 0;color:#64748b;font-size:18px}}
-                .content {{padding:50px 70px}}
+                .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
+                .header {{background:linear-gradient(135deg,#6b46c1,#a78bfa);color:white;padding:70px 50px;text-align:center}}
+                .header h1 {{margin:0;font-size:52px;font-weight:900}}
+                .header .score {{font-size:110px;font-weight:900;margin:28px 0 0}}
+                .content {{padding:60px 70px}}
                 table {{width:100%;font-size:21px;border-collapse:collapse}}
                 tr {{border-bottom:1px solid #e2e8f0}}
-                td {{padding:18px 0}}
-                .label {{font-weight:600;color:#1e293b;width:65%}}
-                .value {{text-align:right;font-weight:700;color:#6d28d9;font-size:24px}}
-                .total {{text-align:center;padding:30px;font-size:32px;font-weight:900;color:#1e293b;background:#f8fafc}}
-                .feedback {{margin-top:50px;padding:32px;background:#f1f5f9;border-left:6px solid #64748b;
-                            border-radius:12px;font-size:18px;line-height:1.8;color:#1e293b}}
-                .action {{text-align:center;margin-top:40px;padding:20px}}
-                .btn {{display:inline-block;background:#6d28d9;color:white;padding:16px 40px;
-                       border-radius:12px;font-size:18px;font-weight:700;text-decoration:none}}
-                .btn:hover {{background:#5b21b6}}
-                @media(max-width:640px){{
-                    .content{{padding:40px 30px}}.header{{padding:30px 20px}}
-                }}
+                td {{padding:22px 0}}
+                .label {{font-weight:600;color:#1e293b}}
+                .value {{text-align:right;font-weight:700;color:#1d4ed8}}
+                .feedback {{margin-top:60px;padding:36px;background:#f0fdf4;border-left:8px solid #22c55e;border-radius:18px;font-size:19px;line-height:1.9;color:#166534}}
             </style>
         </head>
         <body>
             <div class="card">
                 <div class="header">
-                    <h1>{name}'s Grade Report</h1>
-                    <p>Instant AI evaluation</p>
+                    <h1>Grade Report</h1>
+                    <p style="margin:16px 0 0;font-size:26px"><strong>{name}</strong></p>
+                    <div class="score">{total}</div>
                 </div>
                 <div class="content">
                     <table>
@@ -123,15 +113,8 @@ def submit():
                         <tr><td class="label">{score_items[4][0]}</td><td class="value">{score_items[4][1]}</td></tr>
                         <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
                     </table>
-
-                    <div class="total">Total Score: {total}/100</div>
-
                     <div class="feedback">
                         <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
-                    </div>
-
-                    <div class="action">
-                        <a href="/" class="btn">Grade Another Sketch</a>
                     </div>
                 </div>
             </div>
