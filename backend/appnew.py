@@ -78,13 +78,15 @@ def submit():
         # HTML Output
         html = f"""
         <div class="card">
+            <!-- Clean white header -->
             <div class="grade-report-header">
                 <h1>{name}'s Grade Report</h1>
                 <div class="score-display">{total}/100</div>
             </div>
 
-            <div style="padding:0 70px 50px">
-                <table style="width:100%;border-collapse:collapse;font-size:21px">
+            <!-- Beautiful scores table – exactly like before, but using your old classes -->
+            <div class="content">
+                <table>
                     <tr><td class="label">{score_items[0][0]}</td><td class="value">{score_items[0][1]}</td></tr>
                     <tr><td class="label">{score_items[1][0]}</td><td class="value">{score_items[1][1]}</td></tr>
                     <tr><td class="label">{score_items[2][0]}</td><td class="value">{score_items[2][1]}</td></tr>
@@ -93,10 +95,17 @@ def submit():
                     <tr><td class="label">{score_items[5][0]}</td><td class="value">{score_items[5][1]}</td></tr>
                 </table>
 
-                <div class="feedback-box">
+                <!-- Original feedback style – but grey instead of green -->
+                <div class="feedback" style="background:#f8fafc;border-left:8px solid #64748b;color:#1e293b">
                     <strong>AI Feedback:</strong><br>{feedback.replace('\n','<br>')}
                 </div>
             </div>
+        </div>
+
+        <!-- Force the "Grade Another" button to appear BELOW the result -->
+        <div class="new-submission" style="margin-top:60px">
+            <h2>Submission accepted! Ready for another?</h2>
+            <button onclick="location.reload()">Grade Another Sketch</button>
         </div>
         """
         return html, 200, {'Content-Type': 'text/html'}
