@@ -80,6 +80,7 @@ def submit():
         <style>
                 .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
                 .content {{padding:60px 70px}}
+                .form-area {{padding: 0 !important;}}
                 table {{width:80%;font-size:25px;border-collapse:collapse; margin: 0 auto;}}
                 tr {{border-bottom:1px solid #e2e8f0}}
                 td {{padding:22px 0}}
