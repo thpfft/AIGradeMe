@@ -113,8 +113,8 @@ def submit():
 
         <!-- Force the "Grade Another" button to appear BELOW the result -->
         <div class="new-submission" style="margin-top:60px">
-            <h2>Submission accepted! Ready for another?</h2>
-            <button onclick="location.reload()">Grade Another Sketch</button>
+            <h2>Ready for another?</h2>
+            <button onclick="location.reload()" style="background:#5b21b6;    ">Grade Another Sketch</button>
         </div>
         """
         return html, 200, {'Content-Type': 'text/html'}
