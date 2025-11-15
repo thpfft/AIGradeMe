@@ -80,7 +80,7 @@ def submit():
         # HTML Output
         html = f"""
         <style>
-                .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.14)}}
+                .card {{max-width:820px;margin:40px auto;background:white;border-radius:28px;overflow:hidden;}}
                 .content {{padding:60px 70px}}
                 .form-area:has( #result:not(:empty) ) {{padding: 0;}}
                 table {{width:80%;font-size:25px;border-collapse:collapse; margin: 0 auto;}}
@@ -89,6 +89,7 @@ def submit():
                 .label {{font-weight:600;color:#1e293b}}
                 .value {{text-align:right;font-weight:700;color:#1d4ed8}}
                 .feedback {{margin-top:60px;padding:36px;background:#dbdbdb;border-left:8px solid #777777;border-radius:18px;font-size:19px;line-height:1.9;color:#222222}}
+                
                 #uploadForm {{display: none;}}
                 .rubric-btn {{display: none;}}   
         </style>        
