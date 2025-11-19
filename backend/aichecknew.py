@@ -120,8 +120,10 @@ def analyze_image(image_path: str):
     try:
         resp = requests.post(url, json=payload, timeout=30)
         if resp.status_code != 200:
+            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
             return {"ai_error": "AI model may be overloaded. Please try again later."}
     except:
+            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
             return {"ai_error": "AI model may be overloaded. Please try again later."}
         
     try:
