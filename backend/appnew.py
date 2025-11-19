@@ -94,6 +94,23 @@ def submit():
                 
                 #uploadForm {{display: none;}}
                 .rubric-btn {{display: none;}}   
+
+                @media (max-width: 640px) {{
+                    .grade-report-header, .content {{
+                        padding: 30px 15px;
+                    }}
+                    table {{
+                        width: 100%;
+                        font-size: 18px;
+                    }}
+                    td {{
+                        padding: 10px 0;
+                    }}
+                    .feedback {{
+                        padding: 18px 15px; 
+                        margin-top: 40px; 
+                    }}
+                }}
         </style>        
         <div class="card">
             <div class="grade-report-header">
