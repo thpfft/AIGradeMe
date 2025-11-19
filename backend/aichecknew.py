@@ -124,9 +124,9 @@ def analyze_image(image_path: str):
             if resp.status_code != 200:
                 print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
                 return {"ai_error": "AI model may be overloaded. Please try again later."}
-            except Exception as e:
-                print(f"ERROR/EXCEPTION (network/connection/etc.): {e}")
-                return {"ai_error": "Network or connection error. Please try again later."}
+        except Exception as e:
+            print(f"ERROR/EXCEPTION (network/connection/etc.): {e}")
+            return {"ai_error": "Network or connection error. Please try again later."}
         
         try:
             return resp.json()
