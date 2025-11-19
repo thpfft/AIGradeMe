@@ -9,6 +9,7 @@ import requests
 import json
 import logging
 import sys
+import time
 
 # Configure logging to output to STDOUT
 logging.basicConfig(
@@ -117,21 +118,43 @@ def analyze_image(image_path: str):
 
     url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
     
-    try:
-        resp = requests.post(url, json=payload, timeout=30)
-        if resp.status_code != 200:
-            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
-            return {"ai_error": "AI model may be overloaded. Please try again later."}
-    except:
-            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
-            return {"ai_error": "AI model may be overloaded. Please try again later."}
+    for attempt in range(4):
+        try:
+            resp = requests.post(url, json=payload, timeout=30)
+            if resp.status_code != 200:
+                print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
+                return {"ai_error": "AI model may be overloaded. Please try again later."}
+            except Exception as e:
+                print(f"ERROR/EXCEPTION (network/connection/etc.): {e}")
+                return {"ai_error": "Network or connection error. Please try again later."}
         
-    try:
-        return resp.json()
-    except:
-        return {"ai_error": "AI response error. Please try again later."}
+        try:
+            return resp.json()
+        except Exception as e:
+            print(f"JSON parse failed even though status 200: {e}")
+            return {"ai_error": "AI response error. Please try again later."}
     
-    # return resp.json()
+        # Retry delay
+        if attempt < 3:
+            time.sleep(2 ** attempt)
+        else:
+            return {"ai_error": "AI model may be overloaded. Please try again later."}
+    
+#    try:
+#        resp = requests.post(url, json=payload, timeout=30)
+#        if resp.status_code != 200:
+#            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
+#            return {"ai_error": "AI model may be overloaded. Please try again later."}
+#    except:
+#            print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
+#            return {"ai_error": "AI model may be overloaded. Please try again later."}
+#        
+#    try:
+#        return resp.json()
+#    except:
+#        return {"ai_error": "AI response error. Please try again later."}
+#    
+#    # return resp.json()
 
 def get_rubric() -> str:
     return RUBRIC_TEXT
