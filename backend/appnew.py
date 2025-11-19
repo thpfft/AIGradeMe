@@ -12,6 +12,8 @@ import os
 import tempfile
 import json
 from datetime import datetime
+import time
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -140,8 +142,11 @@ def submit():
             pass
 
 @app.route("/", methods=["GET"])
-def home():
-    return "Ready."
+# def home():
+#     return "Ready."
+def keep_alive():
+    time.sleep(0.15 + random.random() * 0.1)   # 150–250 ms delay
+    return f"OK {datetime.utcnow().isoformat()}Z"
 
 @app.route("/rubric", methods=["GET"])
 def rubric():
