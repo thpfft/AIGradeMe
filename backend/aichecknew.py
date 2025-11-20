@@ -123,19 +123,21 @@ def analyze_image(image_path: str):
             resp = requests.post(url, json=payload, timeout=30)
             if resp.status_code != 200:
                 print(f"RAW API ERROR DUMP (Status {resp.status_code}): {resp.text}")
-                return {"ai_error": "AI model may be overloaded. Please try again later."}
+                # return {"ai_error": "AI model may be overloaded. Please try again later."}
         except Exception as e:
             print(f"ERROR/EXCEPTION (network/connection/etc.): {e}")
-            return {"ai_error": "Network or connection error. Please try again later."}
+            # return {"ai_error": "Network or connection error. Please try again later."}
         
-        try:
-            return resp.json()
-        except Exception as e:
-            print(f"JSON parse failed even though status 200: {e}")
-            return {"ai_error": "AI response error. Please try again later."}
+        if resp.status_code == 200:
+            try:
+                return resp.json()
+            except Exception as e:
+                print(f"JSON parse failed even though status 200: {e}")
+                return {"ai_error": "AI response error. Please try again later."}
     
         # Retry delay
         if attempt < 3:
+            print(f"attempting again...({attempt+1})")
             time.sleep(2 ** attempt)
         else:
             return {"ai_error": "AI model may be overloaded. Please try again later."}
